@@ -31,7 +31,7 @@ export function InputPanel({
           <input
             type="range"
             min={0.021}
-            max={0.125}
+            max={0.250}
             step={0.001}
             value={attachmentThickness}
             onChange={(e) => onAttachmentChange(parseFloat(e.target.value))}
@@ -44,7 +44,7 @@ export function InputPanel({
         <input
           type="number"
           min={0.021}
-          max={0.125}
+          max={0.250}
           step={0.001}
           value={attachmentThickness}
           onChange={(e) => onAttachmentChange(parseFloat(e.target.value))}
@@ -77,21 +77,28 @@ export function InputPanel({
         <label className="block mb-2 text-sm font-medium text-slate-300">
           Environment
         </label>
-        <button
-          onClick={() => onOutdoorChange(!isOutdoor)}
-          className={`w-full flex items-center justify-between px-3 py-2 rounded text-sm font-medium transition-colors ${
-            isOutdoor
-              ? 'bg-sky-700 text-white'
-              : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
-          }`}
-        >
-          <span>{isOutdoor ? 'Outdoor / Corrosive' : 'Indoor / Dry'}</span>
-          <span
-            className={`w-4 h-4 rounded-full border-2 shrink-0 ${
-              isOutdoor ? 'bg-white border-white' : 'border-slate-500'
+        <div className="flex rounded overflow-hidden border border-slate-700">
+          <button
+            onClick={() => onOutdoorChange(false)}
+            className={`flex-1 py-2 text-sm font-medium transition-colors ${
+              !isOutdoor
+                ? 'bg-slate-600 text-slate-100'
+                : 'bg-slate-800 text-slate-500 hover:bg-slate-750 hover:text-slate-400'
             }`}
-          />
-        </button>
+          >
+            Interior
+          </button>
+          <button
+            onClick={() => onOutdoorChange(true)}
+            className={`flex-1 py-2 text-sm font-medium transition-colors border-l border-slate-700 ${
+              isOutdoor
+                ? 'bg-sky-700 text-white'
+                : 'bg-slate-800 text-slate-500 hover:text-slate-400'
+            }`}
+          >
+            Exterior
+          </button>
+        </div>
         {isOutdoor && (
           <p className="mt-1.5 text-xs text-sky-400">410 Stainless Steel only</p>
         )}

@@ -1,5 +1,17 @@
 import { GAUGE_LABELS } from '../data/gauges';
 
+const ATTACHMENT_PRESETS: { label: string; value: number }[] = [
+  { label: '25 ga',  value: 0.021 },
+  { label: '20 ga',  value: 0.033 },
+  { label: '18 ga',  value: 0.048 },
+  { label: '16 ga',  value: 0.060 },
+  { label: '14 ga',  value: 0.075 },
+  { label: '12 ga',  value: 0.105 },
+  { label: '1/8"',   value: 0.125 },
+  { label: '3/16"',  value: 0.1875 },
+  { label: '1/4"',   value: 0.250 },
+];
+
 interface Props {
   attachmentThickness: number;
   substrateGauge: string;
@@ -17,6 +29,8 @@ export function InputPanel({
   onGaugeChange,
   onOutdoorChange,
 }: Props) {
+  const activePreset = ATTACHMENT_PRESETS.find((p) => p.value === attachmentThickness);
+
   return (
     <aside className="flex flex-col gap-8 p-6 bg-slate-900 border-r border-slate-700 w-64 shrink-0 overflow-y-auto">
       <div>
@@ -24,32 +38,44 @@ export function InputPanel({
           Connection Parameters
         </h2>
 
-        <label className="block mb-1 text-sm font-medium text-slate-300">
+        <label className="block mb-2 text-sm font-medium text-slate-300">
           Attachment Thickness
         </label>
-        <div className="flex items-center gap-3 mb-2">
+
+        <div className="grid grid-cols-3 gap-1 mb-3">
+          {ATTACHMENT_PRESETS.map((p) => (
+            <button
+              key={p.label}
+              onClick={() => onAttachmentChange(p.value)}
+              className={`py-1.5 rounded text-xs font-mono transition-colors ${
+                activePreset?.label === p.label
+                  ? 'bg-amber-400 text-slate-900 font-semibold'
+                  : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+              }`}
+            >
+              {p.label}
+            </button>
+          ))}
+        </div>
+
+        <div className="flex items-center gap-2">
           <input
-            type="range"
-            min={0.021}
-            max={0.250}
+            type="number"
+            min={0.001}
             step={0.001}
             value={attachmentThickness}
-            onChange={(e) => onAttachmentChange(parseFloat(e.target.value))}
-            className="flex-1 accent-amber-400"
+            onChange={(e) => {
+              const v = parseFloat(e.target.value);
+              if (!isNaN(v) && v > 0) onAttachmentChange(v);
+            }}
+            className="flex-1 bg-slate-800 border border-slate-600 rounded px-3 py-1.5 text-sm font-mono text-slate-100 focus:outline-none focus:ring-1 focus:ring-amber-400"
+            placeholder="0.000"
           />
-          <span className="text-sm font-mono text-amber-300 w-14 text-right tabular-nums">
-            {attachmentThickness.toFixed(3)}"
-          </span>
+          <span className="text-xs text-slate-500 font-mono shrink-0">in.</span>
         </div>
-        <input
-          type="number"
-          min={0.021}
-          max={0.250}
-          step={0.001}
-          value={attachmentThickness}
-          onChange={(e) => onAttachmentChange(parseFloat(e.target.value))}
-          className="w-full bg-slate-800 border border-slate-600 rounded px-3 py-1.5 text-sm font-mono text-slate-100 focus:outline-none focus:ring-1 focus:ring-amber-400"
-        />
+        {!activePreset && (
+          <p className="mt-1 text-xs text-amber-500 font-mono">custom</p>
+        )}
       </div>
 
       <div>
@@ -83,7 +109,7 @@ export function InputPanel({
             className={`flex-1 py-2 text-sm font-medium transition-colors ${
               !isOutdoor
                 ? 'bg-slate-600 text-slate-100'
-                : 'bg-slate-800 text-slate-500 hover:bg-slate-750 hover:text-slate-400'
+                : 'bg-slate-800 text-slate-500 hover:text-slate-400'
             }`}
           >
             Interior

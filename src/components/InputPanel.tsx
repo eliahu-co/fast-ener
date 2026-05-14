@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ChevronUp, ChevronDown, Trash2, Plus, Check } from 'lucide-react';
+import { ChevronUp, ChevronDown, Trash2, Plus, Check, X } from 'lucide-react';
 import { GAUGE_LABELS } from '../data/gauges';
 import { ATTACHMENT_MATERIAL_DEFS, ATTACHMENT_MATERIAL_MAP } from '../data/attachments';
 import type { AttachmentLayer, AttachmentMaterial } from '../types';
@@ -13,6 +13,7 @@ interface Props {
   onLayersChange: (layers: AttachmentLayer[]) => void;
   onGaugeChange: (g: string) => void;
   onOutdoorChange: (v: boolean) => void;
+  onClose?: () => void;
 }
 
 export function InputPanel({
@@ -22,6 +23,7 @@ export function InputPanel({
   onLayersChange,
   onGaugeChange,
   onOutdoorChange,
+  onClose,
 }: Props) {
   // Tracks raw string values typed in each layer's custom input, keyed by layer index.
   // undefined = not editing; empty string or any string = user is actively editing that row.
@@ -88,7 +90,20 @@ export function InputPanel({
     totalThickness + ATTACHMENT_MATERIAL_DEFS[0].presets[0].thickness > MAX_TOTAL;
 
   return (
-    <aside className="flex flex-col gap-6 p-4 bg-slate-900 border-r border-slate-700 w-72 shrink-0 overflow-y-auto">
+    <aside className="flex flex-col bg-slate-900 border-r border-slate-700 w-full md:w-72 h-full shrink-0 overflow-y-auto">
+      {onClose && (
+        <div className="md:hidden flex items-center justify-between px-4 py-3 border-b border-slate-700 shrink-0">
+          <span className="text-sm font-semibold text-slate-300">Connection Settings</span>
+          <button
+            onClick={onClose}
+            className="p-1 rounded text-slate-400 hover:text-slate-100 transition-colors"
+            aria-label="Close settings"
+          >
+            <X size={18} />
+          </button>
+        </div>
+      )}
+      <div className="flex flex-col gap-6 p-4">
 
       {/* ── Attachment layers ── */}
       <div>
@@ -320,6 +335,7 @@ export function InputPanel({
         {isOutdoor && (
           <p className="mt-1.5 text-xs text-sky-400">410 Stainless Steel only</p>
         )}
+      </div>
       </div>
     </aside>
   );

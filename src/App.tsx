@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Zap } from 'lucide-react';
+import { Zap, SlidersHorizontal } from 'lucide-react';
 import { InputPanel } from './components/InputPanel';
 import { CrossSection } from './components/CrossSection';
 import { ResultsTable } from './components/ResultsTable';
@@ -12,6 +12,7 @@ export function App() {
   ]);
   const [substrateGauge, setSubstrateGauge] = useState('18 ga');
   const [isOutdoor, setIsOutdoor] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const results = useMemo(
     () => filterFasteners(layers, substrateGauge, isOutdoor),
@@ -37,15 +38,24 @@ export function App() {
         </div>
       </header>
 
-      <div className="flex flex-1 overflow-hidden">
-        <InputPanel
-          layers={layers}
-          substrateGauge={substrateGauge}
-          isOutdoor={isOutdoor}
-          onLayersChange={setLayers}
-          onGaugeChange={setSubstrateGauge}
-          onOutdoorChange={setIsOutdoor}
-        />
+      <div className="flex flex-1 overflow-hidden relative">
+        {/* Sidebar — full-screen on mobile, normal column on md+ */}
+        <div className={`
+          flex-col
+          fixed inset-0 z-40
+          md:relative md:inset-auto md:z-auto md:flex
+          ${sidebarOpen ? 'flex' : 'hidden'}
+        `}>
+          <InputPanel
+            layers={layers}
+            substrateGauge={substrateGauge}
+            isOutdoor={isOutdoor}
+            onLayersChange={setLayers}
+            onGaugeChange={setSubstrateGauge}
+            onOutdoorChange={setIsOutdoor}
+            onClose={() => setSidebarOpen(false)}
+          />
+        </div>
 
         <main className="flex-1 flex flex-col overflow-auto">
           <section className="flex flex-col items-center pt-8 px-8 bg-slate-950 border-b border-slate-800">
@@ -68,6 +78,17 @@ export function App() {
           </section>
         </main>
       </div>
+
+      {/* FAB — mobile only, shown when sidebar is collapsed */}
+      {!sidebarOpen && (
+        <button
+          onClick={() => setSidebarOpen(true)}
+          className="md:hidden fixed bottom-6 right-6 z-30 bg-amber-400 text-slate-900 rounded-full w-14 h-14 flex items-center justify-center shadow-xl active:scale-95 transition-transform"
+          aria-label="Open settings"
+        >
+          <SlidersHorizontal size={20} />
+        </button>
+      )}
 
       <footer className="px-6 py-2 bg-slate-900 border-t border-slate-700 text-xs text-slate-600 font-mono flex gap-4 shrink-0">
         <span>FAST-ener v1.0</span>

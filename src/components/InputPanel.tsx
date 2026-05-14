@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ChevronUp, ChevronDown, Trash2, Plus, Check, X } from 'lucide-react';
+import { ChevronUp, ChevronDown, Trash2, Plus, Check } from 'lucide-react';
 import { GAUGE_LABELS } from '../data/gauges';
 import { ATTACHMENT_MATERIAL_DEFS, ATTACHMENT_MATERIAL_MAP } from '../data/attachments';
 import type { AttachmentLayer, AttachmentMaterial } from '../types';
@@ -91,18 +91,6 @@ export function InputPanel({
 
   return (
     <aside className="flex flex-col bg-slate-900 border-r border-slate-700 w-full md:w-72 h-full shrink-0 overflow-y-auto">
-      {onClose && (
-        <div className="md:hidden flex items-center justify-between px-4 py-3 border-b border-slate-700 shrink-0">
-          <span className="text-sm font-semibold text-slate-300">Connection Settings</span>
-          <button
-            onClick={onClose}
-            className="p-1 rounded text-slate-400 hover:text-slate-100 transition-colors"
-            aria-label="Close settings"
-          >
-            <X size={18} />
-          </button>
-        </div>
-      )}
       <div className="flex flex-col gap-6 p-4">
 
       {/* ── Attachment layers ── */}
@@ -337,6 +325,17 @@ export function InputPanel({
         )}
       </div>
       </div>
+
+      {onClose && (
+        <div className="md:hidden shrink-0 p-4 border-t border-slate-700">
+          <button
+            onClick={onClose}
+            className="w-full py-3 rounded bg-amber-400 text-slate-900 font-semibold text-sm active:scale-95 transition-transform"
+          >
+            Pick a fastener!
+          </button>
+        </div>
+      )}
     </aside>
   );
 }

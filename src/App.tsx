@@ -4,15 +4,18 @@ import { InputPanel } from './components/InputPanel';
 import { CrossSection } from './components/CrossSection';
 import { ResultsTable } from './components/ResultsTable';
 import { filterFasteners } from './utils/lgsEngine';
+import type { AttachmentLayer } from './types';
 
 export function App() {
-  const [attachmentThickness, setAttachmentThickness] = useState(0.033);
+  const [layers, setLayers] = useState<AttachmentLayer[]>([
+    { material: 'steel', thickness: 0.033 },
+  ]);
   const [substrateGauge, setSubstrateGauge] = useState('18 ga');
   const [isOutdoor, setIsOutdoor] = useState(false);
 
   const results = useMemo(
-    () => filterFasteners(attachmentThickness, substrateGauge, isOutdoor),
-    [attachmentThickness, substrateGauge, isOutdoor],
+    () => filterFasteners(layers, substrateGauge, isOutdoor),
+    [layers, substrateGauge, isOutdoor],
   );
 
   return (
@@ -31,31 +34,28 @@ export function App() {
           <span className="px-2 py-1 rounded bg-slate-800 border border-slate-700">
             IBC / AISI S100 · ASTM C955
           </span>
-          <span className="px-2 py-1 rounded bg-slate-800 border border-slate-700">
-            McMaster-Carr catalog
-          </span>
         </div>
       </header>
 
       <div className="flex flex-1 overflow-hidden">
         <InputPanel
-          attachmentThickness={attachmentThickness}
+          layers={layers}
           substrateGauge={substrateGauge}
           isOutdoor={isOutdoor}
-          onAttachmentChange={setAttachmentThickness}
+          onLayersChange={setLayers}
           onGaugeChange={setSubstrateGauge}
           onOutdoorChange={setIsOutdoor}
         />
 
         <main className="flex-1 flex flex-col overflow-auto">
-          <section className="flex-1 flex flex-col items-center justify-center p-8 bg-slate-950 border-b border-slate-800">
+          <section className="flex flex-col items-center pt-8 px-8 bg-slate-950 border-b border-slate-800">
             <CrossSection
-              attachmentThickness={attachmentThickness}
+              layers={layers}
               substrateGauge={substrateGauge}
             />
           </section>
 
-          <section className="bg-slate-900 shrink-0">
+          <section className="bg-slate-900 flex-1">
             <div className="px-6 py-3 border-b border-slate-700 flex items-center gap-3">
               <h2 className="text-xs font-semibold uppercase tracking-widest text-slate-400">
                 Matching Fasteners
@@ -74,7 +74,7 @@ export function App() {
         <span>·</span>
         <span>Static SPA · Zero network dependencies</span>
         <span>·</span>
-        <span>L ≥ t₁ + t₂ + 0.25&quot;</span>
+        <span>L ≥ TMT + drill-point + 3/TPI · SAE J78</span>
       </footer>
     </div>
   );

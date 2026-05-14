@@ -1,13 +1,26 @@
 {
   "name": "fast-ener",
+  "version": "1.1.0",
+  "description": "LGS self-drilling fastener selection engine — SAE J78 / ASTM C1513 · static SPA · zero runtime dependencies",
+  "author": "Eliahu Cohen",
+  "license": "MIT",
+  "keywords": [
+    "lgs",
+    "light-gauge-steel",
+    "fastener",
+    "self-drilling-screw",
+    "structural-engineering",
+    "cold-formed-steel"
+  ],
   "private": true,
-  "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "lucide-react": "^1.14.0",
@@ -17,6 +30,7 @@
   "devDependencies": {
     "@eslint/js": "^9.13.0",
     "@tailwindcss/vite": "^4.3.0",
+    "@types/node": "^25.7.0",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react-swc": "^3.5.0",
